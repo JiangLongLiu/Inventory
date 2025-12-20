@@ -1,0 +1,8 @@
+root: ./
+
+structure:
+  summary: SUMMARY.md
+  readme: overview.md
+
+redirects:
+  integrations/i/airtable.md: integrations/airtable.md
