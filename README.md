@@ -23,6 +23,8 @@ Here are some guides for you to get started: [Get Started Guides](https://docs.i
 
 See documents on [https://docs.inventory.ztg.app](https://docs.inventory.ztg.app).
 
+Additional repository wiki (stored under `.qoder`): [Project Wiki](/.qoder/repowiki/zh/content)
+
 
 ## Development
 
