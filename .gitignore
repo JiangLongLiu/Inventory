@@ -11,3 +11,11 @@ yarn-error.log
 # Nested git repositories
 #
 Inventory-Docs/.git/
+
+# Tokens and sensitive data
+#
+tokens/
+!tokens/README.md
+*.token
+*.key
+*.secret

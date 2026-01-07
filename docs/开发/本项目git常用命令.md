@@ -67,8 +67,13 @@ git remote add backup https://example.com/repo.git
 # 删除备份仓库
 git remote remove backup
 
-# 配置 Gitea 访问令牌（实际配置示例）
-git remote set-url gitea https://liujianglong:<token>@gitea.inote.live:3232/1203/Inventory
+# 配置 Gitea 访问令牌（安全方式）
+# 首先将令牌保存到 tokens 目录
+echo "your_token_here" > tokens/gitea.token
+
+# 然后使用令牌配置远程 URL
+token=$(cat tokens/gitea.token)
+git remote set-url gitea https://liujianglong:${token}@gitea.inote.live:3232/1203/Inventory
 ```
 
 ---
@@ -830,10 +835,12 @@ git push-all feature/功能名称
 git push-all main
 
 # 配置 Gitea 访问令牌（首次配置）
-git remote set-url gitea https://<username>:<token>@gitea.inote.live:3232/1203/Inventory
+# 1. 将令牌保存到 tokens 目录
+echo "your_token_here" > tokens/gitea.token
 
-# 示例：实际配置命令
-git remote set-url gitea https://liujianglong:6c2af89bf5c691dedc4b53aef787fde647bd6a70@gitea.inote.live:3232/1203/Inventory
+# 2. 使用令牌配置远程 URL
+token=$(cat tokens/gitea.token)
+git remote set-url gitea https://liujianglong:${token}@gitea.inote.live:3232/1203/Inventory
 ```
 
 ---

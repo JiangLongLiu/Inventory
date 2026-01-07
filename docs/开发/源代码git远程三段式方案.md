@@ -332,22 +332,31 @@ git push gitea main
 #    登录 Gitea → 设置 → 应用 → 生成新令牌
 #    令牌名称示例：liujianglong
 
-# 2. 使用用户名 + 令牌配置远程 URL
+# 2. 将令牌保存到 tokens 目录（已添加到 .gitignore）
+echo "your_token_here" > tokens/gitea.token
+
+# 3. 使用令牌配置远程 URL
+token=$(cat tokens/gitea.token)
+git remote set-url gitea https://liujianglong:${token}@gitea.inote.live:3232/1203/Inventory
+
+# 或者直接使用（不推荐，因为会在 shell 历史中留下记录）
 git remote set-url gitea https://<username>:<token>@gitea.inote.live:3232/1203/Inventory
 
-# 示例（实际执行的配置）
-git remote set-url gitea https://liujianglong:6c2af89bf5c691dedc4b53aef787fde647bd6a70@gitea.inote.live:3232/1203/Inventory
-
-# 3. 验证推送
+# 4. 验证推送
 git push gitea main
 # 或推送功能分支
 git push gitea feature/your-feature
 ```
 
 **实际配置结果：**
-- ✅ 访问令牌：已配置
+- ✅ 访问令牌：已配置（存储在 tokens/gitea.token）
 - ✅ 推送测试：成功（feature/nocobase-integration-analysis 和 main 分支已推送）
 - ✅ 数据量：8257 个对象，38.65 MiB
+
+**安全提示：**
+- 令牌文件已添加到 .gitignore，不会被提交到版本控制
+- 请勿在文档或代码中直接写入令牌
+- 如需在其他机器配置，请安全地传输令牌文件
 
 **注意事项：**
 1. 推荐使用 SSH 密钥或访问令牌，更安全
