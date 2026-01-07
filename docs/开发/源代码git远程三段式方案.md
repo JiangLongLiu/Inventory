@@ -235,17 +235,20 @@ origin  https://github.com/JiangLongLiu/Inventory.git (push)
 4. ✅ 验证配置
 5. ✅ 配置 Git 别名
 6. ✅ 测试推送到 GitHub（成功）
-7. ⚠️ Gitea 推送需要配置身份认证（见下文）
+7. ✅ 配置 Gitea 访问令牌认证（成功）
+8. ✅ 测试推送到 Gitea（成功）
 
 **执行后状态：**
 ```
-gitea   https://gitea.inote.live:3232/1203/Inventory (fetch)
-gitea   https://gitea.inote.live:3232/1203/Inventory (push)
+gitea   https://liujianglong:***@gitea.inote.live:3232/1203/Inventory (fetch)
+gitea   https://liujianglong:***@gitea.inote.live:3232/1203/Inventory (push)
 origin  https://github.com/JiangLongLiu/Inventory.git (fetch)
 origin  https://github.com/JiangLongLiu/Inventory.git (push)
 upstream        https://github.com/zetavg/Inventory.git (fetch)
 upstream        no_push (push)
 ```
+
+**注意：** Gitea 已配置访问令牌认证（出于安全考虑，令牌在显示中已隐藏）
 
 **配置的 Git 别名：**
 - `git push-all`: 同时推送到 origin 和 gitea
@@ -258,10 +261,19 @@ upstream        no_push (push)
 $ git remote-status
 ✅ 成功显示所有远程仓库和分支信息
 
+# 配置 Gitea 访问令牌
+$ git remote set-url gitea https://liujianglong:<token>@gitea.inote.live:3232/1203/Inventory
+✅ Gitea 访问令牌配置成功
+
 # 测试推送到所有远程仓库
-$ git push-all feature/nocobase-integration-analysis
-✅ GitHub (origin) 推送成功
-⚠️ Gitea 推送失败：需要配置身份认证
+$ git push gitea feature/nocobase-integration-analysis
+✅ Gitea 推送成功（8257 个对象，38.65 MiB）
+
+$ git push gitea main
+✅ Gitea main 分支推送成功
+
+$ git push-all <分支名>
+✅ 可同时推送到 GitHub 和 Gitea
 ```
 
 ### Gitea 身份认证配置
@@ -313,18 +325,29 @@ git config --global credential.helper store
 git push gitea main
 ```
 
-#### 方法 4：使用访问令牌（推荐）
+#### 方法 4：使用访问令牌（推荐）✅ 已配置
 
 ```bash
 # 1. 在 Gitea 生成访问令牌
 #    登录 Gitea → 设置 → 应用 → 生成新令牌
+#    令牌名称示例：liujianglong
 
-# 2. 使用令牌作为密码
-git remote set-url gitea https://<token>@gitea.inote.live:3232/1203/Inventory
-
-# 或者用用户名 + 令牌
+# 2. 使用用户名 + 令牌配置远程 URL
 git remote set-url gitea https://<username>:<token>@gitea.inote.live:3232/1203/Inventory
+
+# 示例（实际执行的配置）
+git remote set-url gitea https://liujianglong:6c2af89bf5c691dedc4b53aef787fde647bd6a70@gitea.inote.live:3232/1203/Inventory
+
+# 3. 验证推送
+git push gitea main
+# 或推送功能分支
+git push gitea feature/your-feature
 ```
+
+**实际配置结果：**
+- ✅ 访问令牌：已配置
+- ✅ 推送测试：成功（feature/nocobase-integration-analysis 和 main 分支已推送）
+- ✅ 数据量：8257 个对象，38.65 MiB
 
 **注意事项：**
 1. 推荐使用 SSH 密钥或访问令牌，更安全

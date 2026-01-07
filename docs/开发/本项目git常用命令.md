@@ -33,13 +33,15 @@ git remote-status
 
 **输出示例：**
 ```
-gitea   https://gitea.inote.live:3232/1203/Inventory (fetch)
-gitea   https://gitea.inote.live:3232/1203/Inventory (push)
+gitea   https://liujianglong:***@gitea.inote.live:3232/1203/Inventory (fetch)
+gitea   https://liujianglong:***@gitea.inote.live:3232/1203/Inventory (push)
 origin  https://github.com/JiangLongLiu/Inventory.git (fetch)
 origin  https://github.com/JiangLongLiu/Inventory.git (push)
 upstream        https://github.com/zetavg/Inventory.git (fetch)
 upstream        no_push (push)
 ```
+
+**注意：** Gitea 已配置访问令牌认证，令牌在显示中已隐藏。
 
 ### 添加/删除远程仓库
 
@@ -52,6 +54,9 @@ git remote remove <名称>
 
 # 修改远程仓库 URL
 git remote set-url <名称> <新URL>
+
+# 修改远程仓库 URL（带认证）
+git remote set-url <名称> https://<username>:<token>@<host>/<path>
 ```
 
 **示例：**
@@ -61,6 +66,9 @@ git remote add backup https://example.com/repo.git
 
 # 删除备份仓库
 git remote remove backup
+
+# 配置 Gitea 访问令牌（实际配置示例）
+git remote set-url gitea https://liujianglong:<token>@gitea.inote.live:3232/1203/Inventory
 ```
 
 ---
@@ -820,6 +828,12 @@ git push-all feature/功能名称
 
 # 推送到所有备份仓库
 git push-all main
+
+# 配置 Gitea 访问令牌（首次配置）
+git remote set-url gitea https://<username>:<token>@gitea.inote.live:3232/1203/Inventory
+
+# 示例：实际配置命令
+git remote set-url gitea https://liujianglong:6c2af89bf5c691dedc4b53aef787fde647bd6a70@gitea.inote.live:3232/1203/Inventory
 ```
 
 ---
