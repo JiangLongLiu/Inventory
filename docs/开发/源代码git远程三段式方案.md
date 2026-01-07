@@ -233,6 +233,9 @@ origin  https://github.com/JiangLongLiu/Inventory.git (push)
 2. ✅ 添加 gitea 远程仓库
 3. ✅ 配置 upstream 为只读
 4. ✅ 验证配置
+5. ✅ 配置 Git 别名
+6. ✅ 测试推送到 GitHub（成功）
+7. ⚠️ Gitea 推送需要配置身份认证（见下文）
 
 **执行后状态：**
 ```
@@ -254,6 +257,87 @@ upstream        no_push (push)
 # 查看远程和分支状态
 $ git remote-status
 ✅ 成功显示所有远程仓库和分支信息
+
+# 测试推送到所有远程仓库
+$ git push-all feature/nocobase-integration-analysis
+✅ GitHub (origin) 推送成功
+⚠️ Gitea 推送失败：需要配置身份认证
+```
+
+### Gitea 身份认证配置
+
+Gitea 仓库需要身份认证才能推送。有以下几种方法：
+
+#### 方法 1：使用 SSH 密钥（推荐）
+
+```bash
+# 1. 生成 SSH 密钥（如果没有）
+ssh-keygen -t ed25519 -C "your.email@example.com"
+
+# 2. 查看公钥
+cat ~/.ssh/id_ed25519.pub
+
+# 3. 将公钥添加到 Gitea
+#    登录 Gitea → 设置 → SSH/GPG 密钥 → 添加密钥
+
+# 4. 修改 Gitea 远程仓库 URL 为 SSH 地址
+git remote set-url gitea git@gitea.inote.live:1203/Inventory.git
+
+# 5. 测试连接
+ssh -T git@gitea.inote.live -p 22
+
+# 6. 推送测试
+git push gitea feature/nocobase-integration-analysis
+```
+
+#### 方法 2：在 URL 中嵌入凭据（不推荐，不安全）
+
+```bash
+# 修改 URL 包含用户名和密码
+git remote set-url gitea https://username:password@gitea.inote.live:3232/1203/Inventory
+```
+
+#### 方法 3：使用 Git 凭据管理器
+
+```bash
+# Windows
+git config --global credential.helper wincred
+
+# macOS
+git config --global credential.helper osxkeychain
+
+# Linux
+git config --global credential.helper store
+
+# 第一次推送时会提示输入用户名和密码，之后会自动保存
+git push gitea main
+```
+
+#### 方法 4：使用访问令牌（推荐）
+
+```bash
+# 1. 在 Gitea 生成访问令牌
+#    登录 Gitea → 设置 → 应用 → 生成新令牌
+
+# 2. 使用令牌作为密码
+git remote set-url gitea https://<token>@gitea.inote.live:3232/1203/Inventory
+
+# 或者用用户名 + 令牌
+git remote set-url gitea https://<username>:<token>@gitea.inote.live:3232/1203/Inventory
+```
+
+**注意事项：**
+1. 推荐使用 SSH 密钥或访问令牌，更安全
+2. 不要将密码直接写在 URL 中
+3. 如果 Gitea 使用非标准端口，需要在 SSH 配置中指定
+
+**SSH 配置示例（~/.ssh/config）：**
+```
+Host gitea.inote.live
+    HostName gitea.inote.live
+    Port 22
+    User git
+    IdentityFile ~/.ssh/id_ed25519
 ```
 
 ## 故障排除
